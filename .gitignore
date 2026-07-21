@@ -1,0 +1,25 @@
+# Build output
+bin/
+obj/
+
+# PowerShell
+*.psd1.bak
+
+# VS Code
+.vscode/
+
+# Logs
+logs/
+*.log
+
+# Reports
+reports/
+*.html
+*.json
+
+# Test results
+TestResults/
+
+# OS
+Thumbs.db
+Desktop.ini
