@@ -47,7 +47,17 @@ if (Test-Path $publicPath) {
     Get-ChildItem -Path $publicPath -Filter '*.ps1' |
         Sort-Object Name |
         ForEach-Object {
-            . $_.FullName
+
+            Write-Host "Loading public function: $($_.Name)" -ForegroundColor Cyan
+
+            try {
+                . $_.FullName
+            }
+            catch {
+                Write-Host "FAILED: $($_.Name)" -ForegroundColor Red
+                Write-Host $_.Exception.Message -ForegroundColor Yellow
+                throw
+            }
         }
 }
 
