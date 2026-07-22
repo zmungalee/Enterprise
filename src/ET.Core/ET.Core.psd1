@@ -6,7 +6,9 @@
     CompanyName = 'Enterprise Toolkit'
     Description = 'Enterprise Toolkit Core Framework'
     PowerShellVersion = '7.4'
-    FunctionsToExport = @('Start-ETPlatform','Stop-ETPlatform','Get-ETPlatform')
+    FunctionsToExport = @(
+    'Get-ETPlatform'
+)
     CmdletsToExport = @()
     VariablesToExport = @()
     AliasesToExport = @()

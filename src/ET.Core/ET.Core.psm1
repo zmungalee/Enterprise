@@ -1,28 +1,56 @@
-# ET.Core Module
+# ============================================================================
+# Enterprise Toolkit - ET.Core Module
+# ============================================================================
 
-$Public = Join-Path $PSScriptRoot 'Public'
-$Private = Join-Path $PSScriptRoot 'Private'
+# Load classes (Enums first, then other classes)
 
-if (Test-Path $Private) {
-    Get-ChildItem $Private -Filter *.ps1 | ForEach-Object { . $_.FullName }
+$classesPath = Join-Path $PSScriptRoot 'Classes'
+
+if (Test-Path $classesPath) {
+
+    # Load all enums first
+    Get-ChildItem -Path $classesPath -Filter '*.ps1' |
+        Where-Object { $_.Name -like '*Level.ps1' -or $_.Name -like '*Enum.ps1' } |
+        Sort-Object Name |
+        ForEach-Object {
+            . $_.FullName
+        }
+
+    # Load remaining classes
+    Get-ChildItem -Path $classesPath -Filter '*.ps1' |
+        Where-Object { $_.Name -notlike '*Level.ps1' -and $_.Name -notlike '*Enum.ps1' } |
+        Sort-Object Name |
+        ForEach-Object {
+            . $_.FullName
+        }
 }
 
-if (Test-Path $Public) {
-    Get-ChildItem $Public -Filter *.ps1 | ForEach-Object { . $_.FullName }
+# Load private functions
+
+$privatePath = Join-Path $PSScriptRoot 'Private'
+
+if (Test-Path $privatePath) {
+
+    Get-ChildItem -Path $privatePath -Filter '*.ps1' |
+        Sort-Object Name |
+        ForEach-Object {
+            . $_.FullName
+        }
 }
 
-function Get-ETPlatform {
-    [CmdletBinding()]
-    param()
+# Load public functions
 
-    [PSCustomObject]@{
-        Name='Enterprise Toolkit'
-        Version='0.1.0'
-        Status='Initialized'
-    }
+$publicPath = Join-Path $PSScriptRoot 'Public'
+
+if (Test-Path $publicPath) {
+
+    Get-ChildItem -Path $publicPath -Filter '*.ps1' |
+        Sort-Object Name |
+        ForEach-Object {
+            . $_.FullName
+        }
 }
 
-function Start-ETPlatform { Write-Verbose 'Enterprise Toolkit started.' }
-function Stop-ETPlatform { Write-Verbose 'Enterprise Toolkit stopped.' }
+# Export all Enterprise Toolkit public commands
 
-Export-ModuleMember -Function Get-ETPlatform,Start-ETPlatform,Stop-ETPlatform
+Export-ModuleMember -Function *-ET*
