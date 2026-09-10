@@ -1,0 +1,24 @@
+name: Build Remote Script Command Executor
+
+on:
+  push:
+    paths:
+      - 'src/RemoteScriptCommandExecutor/**'
+      - '.github/workflows/build-remote-executor.yml'
+  pull_request:
+    paths:
+      - 'src/RemoteScriptCommandExecutor/**'
+      - '.github/workflows/build-remote-executor.yml'
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Restore
+        run: dotnet restore src/RemoteScriptCommandExecutor/RemoteScriptCommandExecutor.csproj
+      - name: Build
+        run: dotnet build src/RemoteScriptCommandExecutor/RemoteScriptCommandExecutor.csproj -c Release --no-restore
